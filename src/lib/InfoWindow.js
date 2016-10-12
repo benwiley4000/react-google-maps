@@ -10,7 +10,7 @@ import {
 } from "react";
 
 import {
-  render,
+  unstable_renderSubtreeIntoContainer as renderSubtreeIntoContainer,
   unmountComponentAtNode,
 } from "react-dom";
 
@@ -71,8 +71,8 @@ const publicMethodMap = {
 };
 
 const controlledPropUpdaterMap = {
-  children(infoWindow, children) {
-    render(Children.only(children), infoWindow.getContent());
+  children(thisArg, infoWindow, children) {
+    renderSubtreeIntoContainer(thisArg, Children.only(children), infoWindow.getContent());
   },
   options(infoWindow, options) { infoWindow.setOptions(options); },
   position(infoWindow, position) { infoWindow.setPosition(position); },
@@ -135,7 +135,7 @@ export default _.flowRight(
 
   componentDidMount() {
     const infoWindow = getInstanceFromComponent(this);
-    controlledPropUpdaterMap.children(infoWindow, this.props.children);
+    controlledPropUpdaterMap.children(this, infoWindow, this.props.children);
   },
 
   componentWillReceiveProps(nextProps, nextContext) {
