@@ -71,8 +71,8 @@ const publicMethodMap = {
 };
 
 const controlledPropUpdaterMap = {
-  children(thisArg, infoWindow, children) {
-    renderSubtreeIntoContainer(thisArg, Children.only(children), infoWindow.getContent());
+  children(infoWindow, children) {
+    renderSubtreeIntoContainer(this, Children.only(children), infoWindow.getContent());
   },
   options(infoWindow, options) { infoWindow.setOptions(options); },
   position(infoWindow, position) { infoWindow.setPosition(position); },
@@ -135,7 +135,7 @@ export default _.flowRight(
 
   componentDidMount() {
     const infoWindow = getInstanceFromComponent(this);
-    controlledPropUpdaterMap.children(this, infoWindow, this.props.children);
+    controlledPropUpdaterMap.children.call(this, infoWindow, this.props.children);
   },
 
   componentWillReceiveProps(nextProps, nextContext) {
